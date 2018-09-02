@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# TODO
+# - [ ] Add cong. script generator
+# - [ ] Add cong. script decoder & player
+# - [ ] Add image printer
+# - [ ] Add bats
+# - [ ] Run on mac
+# - [ ] Run on ubuntu
+
+MUSIC_URI="secret.mp3"
+MUSIC_PLAY="afplay"
+PICTURE_BASE64="picture_base64"
+
+play_music_background(){
+  command -v ${MUSIC_PLAY} > /dev/null 2>&1 || { echo "Player command ${MUSIC_PLAY} is required to run but not found. Happy birthday anyway :)"; exit 1; }
+  ${MUSIC_PLAY} ${MUSIC_URI} &
+}
+
+print_picture(){
+  [[ $(tput cols) -gt 150 ]] || { echo "Terminal with width > 150 cols is required. Full screen, please?. Happy birthday anyway :)"; exit 1; }
+
+  cat ${PICTURE_BASE64} | base64 -D > /tmp/picture
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    echo "${line}"
+    sleep 0.1
+  done < /tmp/picture
+}
+
+music_killer(){
+  local pwd="Yes, I'm happy now."
+  echo "Happy birthday! Enter '${pwd}' to kill music"
+  read input
+  if [[ ${input} == ${pwd} ]]; then
+    declare -a pss=($(ps | grep ${MUSIC_PLAY} | awk '{print $1}') )
+    for p in ${pss[@]}; do
+      kill ${p}
+    done
+  else
+    echo "Oops. Kill ps by yourself then :P"
+    echo "ps | grep ${MUSIC_PLAY} | xargs kill"
+  fi
+}
+
+play_music_background
+print_picture
+music_killer
