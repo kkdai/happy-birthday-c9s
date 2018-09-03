@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run wakeup706/happy-birthday-c9s
