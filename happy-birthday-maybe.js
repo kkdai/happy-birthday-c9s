@@ -19,7 +19,7 @@ class Maybe {
   }
   
   inspect() {
-    return this.isNothing ? 'Maybe(Nothing) : `Maybe(${inspect(this.$value)})`;
+    return this.isNothing ? 'Maybe(Nothing)' : `Maybe(${inspect(this.$value)})`;
   }
 }
 
